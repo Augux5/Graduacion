@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invitación de Graduación</title>
+  <link rel="stylesheet" href="estilo.css">
+  <link href="https://fonts.googleapis.com/css2?family=Italianno&family=Roboto:wght@300;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+</head>
+<body>
+
+  
+  
+  <canvas id="confetti-canvas"></canvas>
+
+  <header class="header">
+    <h1>E.E.S.T. N°11 "Islas Malvinas"</h1>
+    <p class="subtitle">7°2° Informática</p>
+  </header>
+ 
+  <div id="particles-js"></div>
+  <div class="container">
+    <h2>¡Egresados 2024!</h2>
+    <div class="divider"></div>
+    <div class="matrix-container">
+      <div class="details">
+        <p class="animate__animated animate__fadeInDown"><span>📅 Fecha:</span> 12/12/2024</p>
+        <p class="animate__animated animate__fadeInDown"><span>🕕 Hora:</span> 18:00 hs</p>
+        <p class="animate__animated animate__fadeInDown"><span>📍 Lugar:</span> Martín Miguel de Güemes 3860, Ciudad Evita</p>
+        <p class="animate__animated animate__fadeInDown"><span>🎉 Curso:</span> Informática</p>
+        <p class="animate__animated animate__fadeInDown"><span>🎓 Titulo:</span> Técnico en Informática Personal y Profesional</p>
+      
+      </div>
+    
+      <a href="#" class="btn-neon">
+        <span id="span1"></span>
+        <span id="span2"></span>
+        <span id="span3"></span>
+        <span id="span4"></span>
+        Estás invitado/a
+      </a>
+    </div>
+
+    <div class="animation">
+      <div class="code-line">{ Te esperamos }</div>
+      <div class="code-line">console.log("¡Goodbye!");</div>
+    </div>
+  </div>
+
+  <!-- Canvas de la Matrix al final de todo el contenido -->
+  <canvas id="matrix"></canvas>
+
+  <script>
+    // Partículas de fondo
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: 30 },
+        color: { value: "#ffffff" },
+        shape: { type: "circle" },
+        opacity: {
+          value: 1,
+          anim: {
+            enable: true,
+            speed: 1,
+            opacity_min: 0.1
+          }
+        },
+        size: { value: 3 },
+        move: { enable: true, speed: 2 }
+      },
+      interactivity: {
+        events: { onhover: { enable: true, mode: "repulse" } }
+      }
+    });
+
+    // Matriz animada
+    const matrixCanvas = document.getElementById('matrix');
+    const matrixCtx = matrixCanvas.getContext('2d');
+    function resizeMatrixCanvas() {
+      matrixCanvas.width = window.innerWidth;
+      matrixCanvas.height = window.innerHeight / 2;
+    }
+    resizeMatrixCanvas();
+    window.addEventListener('resize', resizeMatrixCanvas);
+
+    const letters = "01";
+    const fontSize = 16;
+    const columns = Math.floor(matrixCanvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+
+    function drawMatrix() {
+      matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+      matrixCtx.fillStyle = '#0F0';
+      matrixCtx.font = fontSize + 'px monospace';
+
+      drops.forEach((y, x) => {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        matrixCtx.fillText(text, x * fontSize, y * fontSize);
+        if (y * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+          drops[x] = 0;
+        }
+        drops[x]++;
+      });
+
+      // Dibujar requisitos
+      const requirements = [
+        'Requisitos:',
+        '- Ser puntual (Obligatorio)',
+        '- Llegar con regalito (Opcional pero no me quejo)',
+        '- Por cada foto con el egresado $1000'
+      ];
+      matrixCtx.fillStyle = 'rgba(0, 255, 0, 0.7)';
+      matrixCtx.font = '20px monospace';
+      let yPosition = matrixCanvas.height / 2 - 40;
+      requirements.forEach((line) => {
+        const textWidth = matrixCtx.measureText(line).width;
+        const textX = (matrixCanvas.width - textWidth) / 2;
+        matrixCtx.fillText(line, textX, yPosition);
+        yPosition += 30;
+      });
+    }
+    setInterval(drawMatrix, 120);
+
+  // Confeti animado
+const confettiCanvas = document.getElementById('confetti-canvas');
+const confettiCtx = confettiCanvas.getContext('2d');
+
+function resizeConfettiCanvas() {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight;
+}
+resizeConfettiCanvas();
+window.addEventListener('resize', resizeConfettiCanvas);
+
+const confettiParticles = [];
+for (let i = 0; i < 400; i++) {
+  confettiParticles.push({
+    x: Math.random() * confettiCanvas.width,
+    y: Math.random() * confettiCanvas.height,
+    size: Math.random() * 10 + 5,
+    dx: Math.random() * 4 - 2,   // Velocidad horizontal
+    dy: Math.random() * 4 + 1,   // Velocidad vertical
+    color: `rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`,
+    opacity: 1
+  });
+}
+
+let confettiTime = 0;
+function drawConfetti() {
+  confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+
+  confettiParticles.forEach((particle, index) => {
+    confettiCtx.fillStyle = particle.color.replace('rgb', 'rgba').replace(')', `, ${particle.opacity})`);
+    confettiCtx.fillRect(particle.x, particle.y, particle.size, particle.size);
+
+    particle.x += particle.dx; // Movimiento horizontal
+    particle.y += particle.dy; // Movimiento vertical
+
+    // Reducción de opacidad después de 5 segundos
+    if (confettiTime > 5) {
+      particle.opacity -= 0.01; // Disminución suave
+      if (particle.opacity <= 0) {
+        confettiParticles.splice(index, 1); // Eliminar partículas invisibles
+      }
+    }
+  });
+}
+
+// Incrementa el tiempo total de confeti a 8 segundos
+const confettiInterval = setInterval(() => {
+  drawConfetti();
+  confettiTime += 0.03;
+
+  if (confettiTime > 8) {
+    clearInterval(confettiInterval);
+    confettiCanvas.style.display = 'none'; // Ocultar el canvas
+  }
+}, 30);
+
+function resizeConfettiCanvas() {
+  confettiCanvas.width = window.innerWidth;
+  confettiCanvas.height = window.innerHeight > 600 ? window.innerHeight : 600; // Altura mínima
+}
+
+function resizeMatrixCanvas() {
+  matrixCanvas.width = window.innerWidth;
+  matrixCanvas.height = Math.min(window.innerHeight / 2, 400); // Limitar altura en móviles
+}
+
+
+
+
+  </script>
+
+  <style>
+    /* Ajustar las partículas como fondo */
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    /* Contenedor para la matriz */
+    .matrix-container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    #matrix {
+      position: absolute; /* Cambiar a absolute para no interferir con el flujo del contenido */
+      bottom: -50%; /* Coloca el canvas debajo de todo el contenido */
+      left: 0;
+      width: 100%;
+      height: 50%; /* Dejar el tamaño de la mitad inferior de la página */
+      z-index: -2; /* Asegurarse de que no tape nada */
+      pointer-events: none;
+    }
+
+    /* Detalles encima de la matriz */
+    .details {
+      position: relative;
+      z-index: 2;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 255, 156, 0.5);
+    }
+
+    /* Animaciones y contenido */
+    .animation {
+      margin-top: 20px;
+    }
+
+    .code-line {
+      font-family: 'Courier New', monospace;
+      color: green;
+      font-size: 20px;
+    }
+  </style>
+</body>
+</html>
